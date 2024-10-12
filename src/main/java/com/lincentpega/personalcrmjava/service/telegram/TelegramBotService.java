@@ -7,11 +7,8 @@ import com.lincentpega.personalcrmjava.service.telegram.matcher.TelegramCommandM
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
-
-import java.util.concurrent.TimeUnit;
 
 @Service
 @Log4j2
@@ -20,21 +17,17 @@ public class TelegramBotService {
     private final TelegramProperties telegramProperties;
     private final TelegramChatIdHandler chatIdHandler;
     private final TelegramStartHandler startHandler;
-
-    private TelegramBotsLongPollingApplication application;
+    private final TelegramBotsLongPollingApplication application;
 
     public TelegramBotService(
             TelegramProperties telegramProperties,
             TelegramChatIdHandler chatIdHandler,
-            TelegramStartHandler startHandler) {
+            TelegramStartHandler startHandler,
+            TelegramBotsLongPollingApplication application) {
         this.telegramProperties = telegramProperties;
         this.chatIdHandler = chatIdHandler;
         this.startHandler = startHandler;
-    }
-
-    @Scheduled(fixedRate = 2, timeUnit = TimeUnit.SECONDS)
-    public void logAppStatus() {
-        log.info("Telegram Bot Status: {}", application.isRunning());
+        this.application = application;
     }
 
     @SneakyThrows
@@ -48,7 +41,6 @@ public class TelegramBotService {
         bot.addUpdateHandler(new TelegramUpdateProcessor(new TelegramCommandMatcher("/chat_id"), chatIdHandler));
         bot.addUpdateHandler(new TelegramUpdateProcessor(new TelegramCommandMatcher("/start"), startHandler));
 
-        this.application = new TelegramBotsLongPollingApplication();
         application.registerBot(telegramProperties.getBotToken(), bot);
     }
 
