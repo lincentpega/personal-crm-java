@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1728761266685-1" author="imkrasnyukov">
+        <createTable tableName="accounts">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_accounts"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="chat_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1728761266685-2" author="imkrasnyukov">
+        <createTable tableName="birthday_notifications">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_birthday_notifications"/>
+            </column>
+            <column name="content" type="VARCHAR(255)"/>
+            <column name="person_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1728761266685-3" author="imkrasnyukov">
+        <createTable tableName="contact_info">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_contact_info"/>
+            </column>
+            <column name="method" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="person_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1728761266685-4" author="imkrasnyukov">
+        <createTable tableName="job_info">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_job_info"/>
+            </column>
+            <column name="company" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="position" type="VARCHAR(255)"/>
+            <column name="is_current" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="person_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1728761266685-5" author="imkrasnyukov">
+        <createTable tableName="people">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_people"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middle_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="gender" type="VARCHAR(255)"/>
+            <column name="settings_id" type="BIGINT"/>
+            <column name="birth_date" type="DATE"/>
+            <column name="account_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1728761266685-6" author="imkrasnyukov">
+        <createTable tableName="person_settings">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_person_settings"/>
+            </column>
+            <column name="notify_on_birthday" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1728761266685-7" author="imkrasnyukov">
+        <addUniqueConstraint columnNames="settings_id" constraintName="uc_people_settings" tableName="people"/>
+    </changeSet>
+    <changeSet id="1728761266685-10" author="imkrasnyukov">
+        <createIndex indexName="idx_notification_status" tableName="birthday_notifications">
+            <column name="status"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1728761266685-12" author="imkrasnyukov">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="birthday_notifications"
+                                 constraintName="FK_BIRTHDAY_NOTIFICATIONS_ON_PERSON" referencedColumnNames="id"
+                                 referencedTableName="people"/>
+    </changeSet>
+    <changeSet id="1728761266685-13" author="imkrasnyukov">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="contact_info"
+                                 constraintName="FK_CONTACT_INFO_ON_PERSON" referencedColumnNames="id"
+                                 referencedTableName="people"/>
+
+        <createIndex indexName="idx_contact_info_person_id" tableName="contact_info">
+            <column name="person_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1728761266685-14" author="imkrasnyukov">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="job_info"
+                                 constraintName="FK_JOB_INFO_ON_PERSON" referencedColumnNames="id"
+                                 referencedTableName="people"/>
+
+        <createIndex indexName="idx_job_info_person_id" tableName="job_info">
+            <column name="person_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1728761266685-15" author="imkrasnyukov">
+        <addForeignKeyConstraint baseColumnNames="account_id" baseTableName="people"
+                                 constraintName="FK_PEOPLE_ON_ACCOUNT" referencedColumnNames="id"
+                                 referencedTableName="accounts"/>
+
+        <createIndex indexName="idx_people_account_id" tableName="people">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1728761266685-16" author="imkrasnyukov">
+        <addForeignKeyConstraint baseColumnNames="settings_id" baseTableName="people"
+                                 constraintName="FK_PEOPLE_ON_SETTINGS" referencedColumnNames="id"
+                                 referencedTableName="person_settings"/>
+    </changeSet>
+
+</databaseChangeLog>

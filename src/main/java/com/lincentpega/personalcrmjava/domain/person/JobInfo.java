@@ -8,7 +8,9 @@ import org.springframework.lang.Nullable;
 @Getter
 @Setter
 @Entity
-@Table(name = "job_info")
+@Table(name = "job_info", indexes = {
+        @Index(name = "idx_job_info_person_id", columnList = "person_id")
+})
 public class JobInfo {
 
     @Id
