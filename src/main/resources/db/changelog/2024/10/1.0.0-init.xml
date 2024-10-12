@@ -98,9 +98,7 @@
         <addUniqueConstraint columnNames="settings_id" constraintName="uc_people_settings" tableName="people"/>
     </changeSet>
     <changeSet id="1728761266685-10" author="imkrasnyukov">
-        <createIndex indexName="idx_notification_status" tableName="birthday_notifications">
-            <column name="status"/>
-        </createIndex>
+        <sql>CREATE INDEX idx_notification_status ON birthday_notifications (status) WHERE status = 'PENDING'</sql>
     </changeSet>
     <changeSet id="1728761266685-12" author="imkrasnyukov">
         <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="birthday_notifications"
