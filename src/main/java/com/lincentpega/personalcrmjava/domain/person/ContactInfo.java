@@ -10,7 +10,6 @@ import lombok.Setter;
 @Table(name = "contact_info", indexes = {
         @Index(name = "idx_contact_info_person_id", columnList = "person_id")
 })
-
 public class ContactInfo {
 
     @Id

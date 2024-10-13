@@ -3,7 +3,7 @@ package com.lincentpega.personalcrmjava.service.telegram.matcher;
 import com.lincentpega.personalcrmjava.service.telegram.BotStateContainer;
 import com.lincentpega.personalcrmjava.service.telegram.TelegramBotState;
 import com.lincentpega.personalcrmjava.service.telegram.TelegramUpdateMatcher;
-import org.springframework.lang.Nullable;
+import com.lincentpega.personalcrmjava.service.telegram.TelegramUtils;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class TelegramStateMatcher implements TelegramUpdateMatcher {
@@ -18,23 +18,7 @@ public class TelegramStateMatcher implements TelegramUpdateMatcher {
 
     @Override
     public boolean matches(Update update) {
-        var chatId = getChatId(update);
-        if (chatId == null) {
-            return false;
-        }
-        return stateContainer.getState(chatId).equals(state);
-    }
-
-    @Nullable
-    private String getChatId(Update update) {
-        Long chatId;
-        if (update.hasMessage()) {
-            chatId = update.getMessage().getChatId();
-        } else if (update.hasCallbackQuery()) {
-            chatId = update.getCallbackQuery().getMessage().getChatId();
-        } else {
-            return null;
-        }
-        return chatId.toString();
+        var chatId = TelegramUtils.getChatId(update);
+        return chatId.filter(s -> stateContainer.getState(s).equals(state)).isPresent();
     }
 }

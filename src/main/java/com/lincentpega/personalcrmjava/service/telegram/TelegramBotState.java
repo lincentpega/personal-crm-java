@@ -1,5 +1,6 @@
 package com.lincentpega.personalcrmjava.service.telegram;
 
 public enum TelegramBotState {
-    INITIAL
+    INITIAL,
+    CREATE_CONTACT
 }

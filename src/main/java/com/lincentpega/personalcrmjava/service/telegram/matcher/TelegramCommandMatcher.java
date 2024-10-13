@@ -15,7 +15,10 @@ public class TelegramCommandMatcher extends TelegramStateMatcher {
 
     @Override
     public boolean matches(Update update) {
-        super.matches(update);
+        var superMatch = super.matches(update);
+        if (!superMatch) {
+            return false;
+        }
         if (update.hasMessage()) {
             var message = update.getMessage();
             if (message.hasText()) {

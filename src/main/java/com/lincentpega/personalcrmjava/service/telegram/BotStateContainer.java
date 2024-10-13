@@ -2,6 +2,7 @@ package com.lincentpega.personalcrmjava.service.telegram;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -9,7 +10,9 @@ public class BotStateContainer {
 
     private final StringRedisTemplate redisTemplate;
 
-    private final String KEY_PREFIX = "bot-state:";
+    private final String STATE_KEY_FORMAT = "bot-state:%s";
+    private final String VALUE_KEY_FORMAT = "bot-state-value-%s:%s";
+
 
     public BotStateContainer(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -17,7 +20,7 @@ public class BotStateContainer {
 
     @NonNull
     public TelegramBotState getState(String chatId) {
-        String key = KEY_PREFIX + chatId;
+        String key = String.format(STATE_KEY_FORMAT, chatId);
         String stateRaw = redisTemplate.opsForValue().get(key);
         TelegramBotState state = null;
         if (stateRaw != null) {
@@ -31,7 +34,22 @@ public class BotStateContainer {
     }
 
     public void setState(@NonNull String chatId, @NonNull TelegramBotState state) {
-        String key = KEY_PREFIX + chatId;
+        String key = String.format(STATE_KEY_FORMAT, chatId);
         redisTemplate.opsForValue().set(key, state.toString());
+    }
+
+    public void setValue(@NonNull String chatId, @NonNull String key, @NonNull String value) {
+        var redisKey = String.format(VALUE_KEY_FORMAT, chatId, key);
+        redisTemplate.opsForValue().set(redisKey, value);
+    }
+
+    @Nullable
+    public String getValue(@NonNull String chatId, @NonNull String key) {
+        var redisKey = String.format(VALUE_KEY_FORMAT, chatId, key);
+        return redisTemplate.opsForValue().get(redisKey);
+    }
+
+    public void clearValues(@NonNull String chatId) {
+        redisTemplate.delete("bot-state-value-" + chatId + "*");
     }
 }

@@ -1,7 +1,9 @@
 package com.lincentpega.personalcrmjava.service.telegram;
 
+import lombok.extern.log4j.Log4j2;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+@Log4j2
 public class TelegramUpdateProcessor {
 
     private final TelegramUpdateMatcher matcher;
@@ -13,11 +15,16 @@ public class TelegramUpdateProcessor {
     }
 
     public boolean process(Update update) {
-        if (matcher.matches(update)) {
-            handlerFunc.handle(update);
-            return true;
-        }
+        try {
+            if (matcher.matches(update)) {
+                handlerFunc.handle(update);
+                return true;
+            }
 
-        return false;
+            return false;
+        } catch (Exception e) {
+            log.error("Failed to process update", e);
+            return false;
+        }
     }
 }

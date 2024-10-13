@@ -2,8 +2,10 @@ package com.lincentpega.personalcrmjava.service.telegram;
 
 import com.lincentpega.personalcrmjava.configuration.TelegramProperties;
 import com.lincentpega.personalcrmjava.service.telegram.handler.TelegramChatIdHandler;
+import com.lincentpega.personalcrmjava.service.telegram.handler.TelegramCreateContactHandler;
 import com.lincentpega.personalcrmjava.service.telegram.handler.TelegramStartHandler;
 import com.lincentpega.personalcrmjava.service.telegram.matcher.TelegramCommandMatcher;
+import com.lincentpega.personalcrmjava.service.telegram.matcher.TelegramContactCallbackMatcher;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -45,11 +47,22 @@ public class TelegramBotService {
                         new TelegramChatIdHandler(applicationContext)
                 )
         );
-
         bot.addUpdateHandler(
                 new TelegramUpdateProcessor(
                         new TelegramCommandMatcher("/start", TelegramBotState.INITIAL, botStateContainer),
                         new TelegramStartHandler(applicationContext)
+                )
+        );
+        bot.addUpdateHandler(
+                new TelegramUpdateProcessor(
+                        new TelegramCommandMatcher("/create_contact", TelegramBotState.INITIAL, botStateContainer),
+                        new TelegramCreateContactHandler(applicationContext)
+                )
+        );
+        bot.addUpdateHandler(
+                new TelegramUpdateProcessor(
+                        new TelegramContactCallbackMatcher(botStateContainer),
+                        new TelegramCreateContactHandler(applicationContext)
                 )
         );
 
