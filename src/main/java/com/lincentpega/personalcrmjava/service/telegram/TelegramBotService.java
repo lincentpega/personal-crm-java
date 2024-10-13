@@ -7,6 +7,7 @@ import com.lincentpega.personalcrmjava.service.telegram.matcher.TelegramCommandM
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 
@@ -15,19 +16,19 @@ import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 public class TelegramBotService {
 
     private final TelegramProperties telegramProperties;
-    private final TelegramChatIdHandler chatIdHandler;
-    private final TelegramStartHandler startHandler;
     private final TelegramBotsLongPollingApplication application;
+    private final ApplicationContext applicationContext;
+    private final BotStateContainer botStateContainer;
 
     public TelegramBotService(
             TelegramProperties telegramProperties,
-            TelegramChatIdHandler chatIdHandler,
-            TelegramStartHandler startHandler,
-            TelegramBotsLongPollingApplication application) {
+            TelegramBotsLongPollingApplication application,
+            ApplicationContext applicationContext,
+            BotStateContainer botStateContainer) {
         this.telegramProperties = telegramProperties;
-        this.chatIdHandler = chatIdHandler;
-        this.startHandler = startHandler;
         this.application = application;
+        this.applicationContext = applicationContext;
+        this.botStateContainer = botStateContainer;
     }
 
     @SneakyThrows
@@ -38,8 +39,19 @@ public class TelegramBotService {
 
         var bot = new TelegramBot();
 
-        bot.addUpdateHandler(new TelegramUpdateProcessor(new TelegramCommandMatcher("/chat_id"), chatIdHandler));
-        bot.addUpdateHandler(new TelegramUpdateProcessor(new TelegramCommandMatcher("/start"), startHandler));
+        bot.addUpdateHandler(
+                new TelegramUpdateProcessor(
+                        new TelegramCommandMatcher("/chat_id", TelegramBotState.INITIAL, botStateContainer),
+                        new TelegramChatIdHandler(applicationContext)
+                )
+        );
+
+        bot.addUpdateHandler(
+                new TelegramUpdateProcessor(
+                        new TelegramCommandMatcher("/start", TelegramBotState.INITIAL, botStateContainer),
+                        new TelegramStartHandler(applicationContext)
+                )
+        );
 
         application.registerBot(telegramProperties.getBotToken(), bot);
     }

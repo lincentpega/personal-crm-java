@@ -4,24 +4,21 @@ import com.lincentpega.personalcrmjava.domain.account.Account;
 import com.lincentpega.personalcrmjava.service.account.AccountService;
 import com.lincentpega.personalcrmjava.service.telegram.TelegramUpdateHandlerFunc;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Service;
+import org.springframework.context.ApplicationContext;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 @Log4j2
-@Service
 public class TelegramStartHandler implements TelegramUpdateHandlerFunc {
 
     private final TelegramClient telegramClient;
     private final AccountService accountService;
 
-    public TelegramStartHandler(
-            TelegramClient telegramClient,
-            AccountService accountService) {
-        this.telegramClient = telegramClient;
-        this.accountService = accountService;
+    public TelegramStartHandler(ApplicationContext applicationContext) {
+        this.telegramClient = applicationContext.getBean(TelegramClient.class);
+        this.accountService = applicationContext.getBean(AccountService.class);
     }
 
     @Override
