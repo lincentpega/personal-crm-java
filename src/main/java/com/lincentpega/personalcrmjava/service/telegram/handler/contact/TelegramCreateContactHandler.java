@@ -1,4 +1,4 @@
-package com.lincentpega.personalcrmjava.service.telegram.handler;
+package com.lincentpega.personalcrmjava.service.telegram.handler.contact;
 
 import com.lincentpega.personalcrmjava.service.telegram.*;
 import lombok.SneakyThrows;

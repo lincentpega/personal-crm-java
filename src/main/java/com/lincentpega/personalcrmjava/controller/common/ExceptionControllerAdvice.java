@@ -46,7 +46,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
-        log.error(e);
+        log.error("Error occurred while processing request", e);
         return ResponseEntity.internalServerError().build();
     }
 

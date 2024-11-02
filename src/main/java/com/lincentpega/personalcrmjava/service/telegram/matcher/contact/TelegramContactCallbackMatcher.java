@@ -1,7 +1,8 @@
-package com.lincentpega.personalcrmjava.service.telegram.matcher;
+package com.lincentpega.personalcrmjava.service.telegram.matcher.contact;
 
 import com.lincentpega.personalcrmjava.service.telegram.BotStateContainer;
 import com.lincentpega.personalcrmjava.service.telegram.TelegramBotState;
+import com.lincentpega.personalcrmjava.service.telegram.matcher.TelegramStateMatcher;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class TelegramContactCallbackMatcher extends TelegramStateMatcher {

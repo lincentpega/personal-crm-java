@@ -28,10 +28,6 @@ public class TelegramStartHandler implements TelegramUpdateHandlerFunc {
         var chatId = message.getChatId().toString();
         var username = message.getFrom().getUserName();
 
-        if (!accountService.existsByName(username)) {
-            accountService.save(new Account(username, chatId));
-        }
-
         var response = new SendMessage(chatId, "Добро пожаловать в Personal CRM bot");
         telegramClient.execute(response);
     }

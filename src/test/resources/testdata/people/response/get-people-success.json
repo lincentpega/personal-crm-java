@@ -1,0 +1,21 @@
+{
+  "items": [
+    {
+      "id": 111,
+      "firstName": "John",
+      "middleName": "Williams",
+      "lastName": "Conor",
+      "birthDate": "13-12-1997",
+      "gender": "MALE"
+    },
+    {
+      "id": 222,
+      "firstName": "Sarah",
+      "lastName": "Conor"
+    }
+  ],
+  "pageNumber": 0,
+  "pageSize": 10,
+  "totalItems": 2,
+  "totalPages": 1
+}

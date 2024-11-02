@@ -16,6 +16,9 @@
             <column name="chat_id" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="locale" type="VARCHAR(10)" defaultValue="ru">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet id="1728761266685-2" author="imkrasnyukov">

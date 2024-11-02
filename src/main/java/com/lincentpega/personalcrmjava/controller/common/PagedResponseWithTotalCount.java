@@ -4,7 +4,8 @@ import java.util.List;
 
 public record PagedResponseWithTotalCount<T>(
         List<T> items,
-        long totalCount,
+        long totalItems,
+        int totalPages,
         int pageNumber,
         int pageSize
 ) {

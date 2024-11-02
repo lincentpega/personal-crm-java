@@ -45,4 +45,6 @@ public class BirthdayNotification {
         this.person = person;
         this.status = status;
     }
+
+
 }

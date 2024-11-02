@@ -2,10 +2,15 @@ package com.lincentpega.personalcrmjava.service.telegram;
 
 import com.lincentpega.personalcrmjava.configuration.TelegramProperties;
 import com.lincentpega.personalcrmjava.service.telegram.handler.TelegramChatIdHandler;
-import com.lincentpega.personalcrmjava.service.telegram.handler.TelegramCreateContactHandler;
+import com.lincentpega.personalcrmjava.service.telegram.handler.contact.TelegramContactCallbackHandler;
+import com.lincentpega.personalcrmjava.service.telegram.handler.contact.TelegramContactSetFieldHandler;
+import com.lincentpega.personalcrmjava.service.telegram.handler.contact.TelegramCreateContactHandler;
 import com.lincentpega.personalcrmjava.service.telegram.handler.TelegramStartHandler;
+import com.lincentpega.personalcrmjava.service.telegram.handler.contact.TelegramSaveContactHandler;
 import com.lincentpega.personalcrmjava.service.telegram.matcher.TelegramCommandMatcher;
-import com.lincentpega.personalcrmjava.service.telegram.matcher.TelegramContactCallbackMatcher;
+import com.lincentpega.personalcrmjava.service.telegram.matcher.contact.TelegramContactCallbackMatcher;
+import com.lincentpega.personalcrmjava.service.telegram.matcher.contact.TelegramContactSetFieldMatcher;
+import com.lincentpega.personalcrmjava.service.telegram.matcher.contact.TelegramSaveContactCallbackMatcher;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -62,7 +67,19 @@ public class TelegramBotService {
         bot.addUpdateHandler(
                 new TelegramUpdateProcessor(
                         new TelegramContactCallbackMatcher(botStateContainer),
-                        new TelegramCreateContactHandler(applicationContext)
+                        new TelegramContactCallbackHandler(applicationContext)
+                )
+        );
+        bot.addUpdateHandler(
+                new TelegramUpdateProcessor(
+                        new TelegramContactSetFieldMatcher(botStateContainer),
+                        new TelegramContactSetFieldHandler(applicationContext)
+                )
+        );
+        bot.addUpdateHandler(
+                new TelegramUpdateProcessor(
+                        new TelegramSaveContactCallbackMatcher(botStateContainer),
+                        new TelegramSaveContactHandler(applicationContext)
                 )
         );
 

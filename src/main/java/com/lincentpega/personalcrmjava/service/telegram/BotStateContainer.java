@@ -5,6 +5,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class BotStateContainer {
 
@@ -50,6 +52,9 @@ public class BotStateContainer {
     }
 
     public void clearValues(@NonNull String chatId) {
-        redisTemplate.delete("bot-state-value-" + chatId + "*");
+        Set<String> keys = redisTemplate.keys("bot-state-value-" + chatId + "*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
     }
 }

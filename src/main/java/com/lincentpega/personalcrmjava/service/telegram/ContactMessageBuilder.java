@@ -19,6 +19,6 @@ public class ContactMessageBuilder {
         var birthdate = botStateContainer.getValue(chatId, "birthdate");
 
         return String.format("Current person data:\nFirst Name: %s\nMiddle Name: %s\nLast Name: %s\nGender: %s\nBirthdate: %s",
-                firstName, lastName, middleName, gender, birthdate);
+                firstName, middleName, lastName, gender, birthdate);
     }
 }

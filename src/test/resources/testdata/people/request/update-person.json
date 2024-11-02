@@ -1,0 +1,34 @@
+{
+  "id": 111,
+  "firstName": "John",
+  "middleName": "Williams",
+  "lastName": "Conor",
+  "birthDate": "13-12-1997",
+  "gender": "MALE",
+  "contactInfos": [
+    {
+      "id": 555,
+      "method": "telegram",
+      "data": "telegram_nickname"
+    },
+    {
+      "id": 666,
+      "method": "phone",
+      "data": "+78005555535"
+    }
+  ],
+  "jobInfos": [
+    {
+      "id": 333,
+      "company": "SberBank",
+      "position": "Software Engineer",
+      "isCurrent": true
+    },
+    {
+      "id": 444,
+      "company": "McKinsey",
+      "position": "Junior Software Developer",
+      "isCurrent": false
+    }
+  ]
+}

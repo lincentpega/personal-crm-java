@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TelegramStateMatcher implements TelegramUpdateMatcher {
 
     private final TelegramBotState state;
-    private final BotStateContainer stateContainer;
+    protected final BotStateContainer stateContainer;
 
     public TelegramStateMatcher(TelegramBotState state, BotStateContainer stateContainer) {
         this.state = state;
