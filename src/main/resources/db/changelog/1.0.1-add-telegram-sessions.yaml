@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1731100538287-1
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_telegram_session
+                  name: id
+                  type: UUID
+              - column:
+                  name: chat_id
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: account_id
+                  type: BIGINT
+            tableName: telegram_session
+  - changeSet:
+      id: 1731100538287-2
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: account_id
+            baseTableName: telegram_session
+            constraintName: FK_TELEGRAM_SESSION_ON_ACCOUNT
+            referencedColumnNames: id
+            referencedTableName: accounts
+

@@ -7,18 +7,22 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
     @Query(value = "SELECT * FROM people p " +
-            "WHERE DATE_PART('MONTH', p.birth_date) = DATE_PART('MONTH', CURRENT_TIMESTAMP AT TIME ZONE :timezone) " +
-            "AND DATE_PART('DAY', p.birth_date) = DATE_PART('DAY', CURRENT_TIMESTAMP AT TIME ZONE :timezone)",
+            "WHERE DATE_PART('MONTH', p.birth_date) = DATE_PART('MONTH', CAST(:date AS DATE)) " +
+            "AND DATE_PART('DAY', p.birth_date) = DATE_PART('DAY', CAST(:date AS DATE)) " +
+            "AND p.account_id = :accountId " +
+            "AND NOT p.is_deleted",
             nativeQuery = true)
-    Iterable<Person> getPeopleWithBirthday(@Param("timezone") String timezone);
+    Iterable<Person> getPeopleWithBirthday(long accountId, @Param("date") LocalDate date);
 
-    Optional<Person> findByIdAndAccountId(Long id, Long accountId);
+    @Query("select p from Person p where p.id = :id and p.account.id = :accountId and p.isDeleted = false")
+    Optional<Person> findById(Long id, long accountId);
 
-    Page<Person> findByAccountId(long accountId, Pageable pageable);
+    @Query("select p from Person p where p.account.id = :accountId and p.isDeleted = false order by p.id")
+    Page<Person> findAll(long accountId, Pageable pageable);
 }

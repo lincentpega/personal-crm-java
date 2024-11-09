@@ -229,6 +229,7 @@ class PersonControllerTest {
                 PersonGender.MALE,
                 new PersonSettings(),
                 PERSON1_BIRTH_DATE,
+                false,
                 null
         );
 
@@ -270,6 +271,7 @@ class PersonControllerTest {
                 null,
                 null,
                 null,
+                false,
                 null
         );
     }

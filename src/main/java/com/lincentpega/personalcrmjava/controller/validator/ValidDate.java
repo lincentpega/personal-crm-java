@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidDate {
-    String message() default "Date format is invalid. Format dd-MM-yyyy is expected";
+    String message() default "Date format is invalid. Format yyyy-MM-dd is expected";
 
     Class<?>[] groups() default {};
 

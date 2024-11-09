@@ -8,7 +8,7 @@ import java.time.format.DateTimeParseException;
 
 public class DateValidator implements ConstraintValidator<ValidDate, String> {
 
-    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {

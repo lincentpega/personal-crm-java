@@ -4,6 +4,8 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <includeAll path="db/changelog/2024/10"/>
+    <include file="/db/changelog/1.0.0-init.yaml"/>
+    <include file="/db/changelog/1.0.1-add-telegram-sessions.yaml"/>
+    <include file="/db/changelog/1.1.0-add-person-is-deleted.yaml"/>
 
 </databaseChangeLog>

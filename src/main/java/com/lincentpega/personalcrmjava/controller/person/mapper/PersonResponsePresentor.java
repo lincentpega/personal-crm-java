@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class PersonResponsePresentor {
 
-    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static ShortPersonResponse presentShort(Person person) {
         return new ShortPersonResponse(

@@ -1,0 +1,418 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1730578055854-1
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_account_roles
+                  name: account_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_account_roles
+                  name: role_id
+                  type: BIGINT
+            tableName: account_roles
+  - changeSet:
+      id: 1730578055854-2
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_accounts
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: chat_id
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: locale
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: email
+                  type: VARCHAR(100)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: username
+                  type: VARCHAR(30)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: DATETIME
+            tableName: accounts
+  - changeSet:
+      id: 1730578055854-3
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_birthday_notifications
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: content
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: person_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: DATETIME
+            tableName: birthday_notifications
+  - changeSet:
+      id: 1730578055854-4
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_contact_info
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: method
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: data
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: person_id
+                  type: BIGINT
+            tableName: contact_info
+  - changeSet:
+      id: 1730578055854-5
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_job_info
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: company
+                  type: VARCHAR(255)
+              - column:
+                  name: position
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_current
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: person_id
+                  type: BIGINT
+            tableName: job_info
+  - changeSet:
+      id: 1730578055854-6
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_people
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: middle_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: gender
+                  type: VARCHAR(255)
+              - column:
+                  name: settings_id
+                  type: BIGINT
+              - column:
+                  name: birth_date
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: account_id
+                  type: BIGINT
+            tableName: people
+  - changeSet:
+      id: 1730578055854-7
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_person_settings
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: notify_on_birthday
+                  type: BOOLEAN
+            tableName: person_settings
+  - changeSet:
+      id: 1730578055854-8
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_refresh_tokens
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: account_id
+                  type: BIGINT
+            tableName: refresh_tokens
+  - changeSet:
+      id: 1730578055854-9
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_roles
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+            tableName: roles
+  - changeSet:
+      id: 1730578055854-10
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: email
+            constraintName: uc_accounts_email
+            tableName: accounts
+  - changeSet:
+      id: 1730578055854-11
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: username
+            constraintName: uc_accounts_username
+            tableName: accounts
+  - changeSet:
+      id: 1730578055854-12
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: settings_id
+            constraintName: uc_people_settings
+            tableName: people
+  - changeSet:
+      id: 1730578055854-15
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: status
+            indexName: idx_notification_status
+            tableName: birthday_notifications
+  - changeSet:
+      id: 1730578055854-17
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: person_id
+            baseTableName: birthday_notifications
+            constraintName: FK_BIRTHDAY_NOTIFICATIONS_ON_PERSON
+            referencedColumnNames: id
+            referencedTableName: people
+  - changeSet:
+      id: 1730578055854-18
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: person_id
+            baseTableName: contact_info
+            constraintName: FK_CONTACT_INFO_ON_PERSON
+            referencedColumnNames: id
+            referencedTableName: people
+        - createIndex:
+            columns:
+              - column:
+                  name: person_id
+            indexName: idx_contact_info_person_id
+            tableName: contact_info
+  - changeSet:
+      id: 1730578055854-19
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: person_id
+            baseTableName: job_info
+            constraintName: FK_JOB_INFO_ON_PERSON
+            referencedColumnNames: id
+            referencedTableName: people
+        - createIndex:
+            columns:
+              - column:
+                  name: person_id
+            indexName: idx_job_info_person_id
+            tableName: job_info
+  - changeSet:
+      id: 1730578055854-20
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: account_id
+            baseTableName: people
+            constraintName: FK_PEOPLE_ON_ACCOUNT
+            referencedColumnNames: id
+            referencedTableName: accounts
+        - createIndex:
+            columns:
+              - column:
+                  name: account_id
+            indexName: idx_people_account_id
+            tableName: people
+  - changeSet:
+      id: 1730578055854-21
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: settings_id
+            baseTableName: people
+            constraintName: FK_PEOPLE_ON_SETTINGS
+            referencedColumnNames: id
+            referencedTableName: person_settings
+  - changeSet:
+      id: 1730578055854-22
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: account_id
+            baseTableName: refresh_tokens
+            constraintName: FK_REFRESH_TOKENS_ON_ACCOUNT
+            referencedColumnNames: id
+            referencedTableName: accounts
+  - changeSet:
+      id: 1730578055854-23
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: account_id
+            baseTableName: account_roles
+            constraintName: fk_accrol_on_account
+            referencedColumnNames: id
+            referencedTableName: accounts
+  - changeSet:
+      id: 1730578055854-24
+      author: imkrasnyukov
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: account_roles
+            constraintName: fk_accrol_on_account_role
+            referencedColumnNames: id
+            referencedTableName: roles
+

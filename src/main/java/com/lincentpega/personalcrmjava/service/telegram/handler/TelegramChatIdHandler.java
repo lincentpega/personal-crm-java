@@ -2,7 +2,6 @@ package com.lincentpega.personalcrmjava.service.telegram.handler;
 
 import com.lincentpega.personalcrmjava.service.telegram.TelegramUpdateHandlerFunc;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.context.ApplicationContext;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -13,8 +12,8 @@ public class TelegramChatIdHandler implements TelegramUpdateHandlerFunc {
 
     private final TelegramClient telegramClient;
 
-    public TelegramChatIdHandler(ApplicationContext applicationContext) {
-        this.telegramClient = applicationContext.getBean(TelegramClient.class);
+    public TelegramChatIdHandler(TelegramClient telegramClient) {
+        this.telegramClient = telegramClient;
     }
 
     @Override

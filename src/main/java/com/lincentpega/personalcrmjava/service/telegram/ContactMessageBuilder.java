@@ -12,11 +12,11 @@ public class ContactMessageBuilder {
     }
 
     public String buildMessage(String chatId) {
-        var firstName = botStateContainer.getValue(chatId, "first-name");
-        var middleName = botStateContainer.getValue(chatId, "middle-name");
-        var lastName = botStateContainer.getValue(chatId, "last-name");
-        var gender = botStateContainer.getValue(chatId, "gender");
-        var birthdate = botStateContainer.getValue(chatId, "birthdate");
+        var firstName = botStateContainer.getValue(chatId, TelegramFieldName.FIRST_NAME.getName());
+        var middleName = botStateContainer.getValue(chatId, TelegramFieldName.MIDDLE_NAME.getName());
+        var lastName = botStateContainer.getValue(chatId, TelegramFieldName.LAST_NAME.getName());
+        var gender = botStateContainer.getValue(chatId, TelegramFieldName.GENDER.getName());
+        var birthdate = botStateContainer.getValue(chatId, TelegramFieldName.BIRTH_DATE.getName());
 
         return String.format("Current person data:\nFirst Name: %s\nMiddle Name: %s\nLast Name: %s\nGender: %s\nBirthdate: %s",
                 firstName, middleName, lastName, gender, birthdate);

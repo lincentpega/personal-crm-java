@@ -4,7 +4,6 @@ import com.lincentpega.personalcrmjava.domain.person.PersonGender;
 import com.lincentpega.personalcrmjava.service.telegram.*;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.context.ApplicationContext;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -23,10 +22,10 @@ public class TelegramContactSetFieldHandler implements TelegramUpdateHandlerFunc
     private final ContactMessageBuilder contactMessageBuilder;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    public TelegramContactSetFieldHandler(ApplicationContext applicationContext) {
-        this.botStateContainer = applicationContext.getBean(BotStateContainer.class);
-        this.telegramClient = applicationContext.getBean(TelegramClient.class);
-        this.contactMessageBuilder = applicationContext.getBean(ContactMessageBuilder.class);
+    public TelegramContactSetFieldHandler(BotStateContainer botStateContainer, TelegramClient telegramClient, ContactMessageBuilder contactMessageBuilder) {
+        this.botStateContainer = botStateContainer;
+        this.telegramClient = telegramClient;
+        this.contactMessageBuilder = contactMessageBuilder;
     }
 
     @SneakyThrows
@@ -40,18 +39,18 @@ public class TelegramContactSetFieldHandler implements TelegramUpdateHandlerFunc
             telegramClient.execute(new SendMessage(chatId, "Value must not be blank"));
         }
         if (state.equals(TelegramBotState.CONTACT_SET_FIRST_NAME)) {
-            botStateContainer.setValue(chatId, "first-name", message);
+            botStateContainer.setValue(chatId, TelegramFieldName.FIRST_NAME.getName(), message);
         } else if (state.equals(TelegramBotState.CONTACT_SET_MIDDLE_NAME)) {
-            botStateContainer.setValue(chatId, "middle-name", message);
+            botStateContainer.setValue(chatId, TelegramFieldName.MIDDLE_NAME.getName(), message);
         } else if (state.equals(TelegramBotState.CONTACT_SET_LAST_NAME)) {
-            botStateContainer.setValue(chatId, "last-name", message);
+            botStateContainer.setValue(chatId, TelegramFieldName.LAST_NAME.getName(), message);
         } else if (state.equals(TelegramBotState.CONTACT_SET_BIRTHDATE)) {
             var date = parseDate(message);
             if (date == null) {
                 telegramClient.execute(new SendMessage(chatId, "Invalid date format. Should be dd-MM-yy"));
                 return;
             }
-            botStateContainer.setValue(chatId, "birthdate", message);
+            botStateContainer.setValue(chatId, TelegramFieldName.BIRTH_DATE.getName(), message);
         } else if (state.equals(TelegramBotState.CONTACT_SET_GENDER)) {
             PersonGender personGender;
             try {
@@ -61,7 +60,7 @@ public class TelegramContactSetFieldHandler implements TelegramUpdateHandlerFunc
                 telegramClient.execute(new SendMessage(chatId, "Invalid gender. Allowed values: " + genders));
                 return;
             }
-            botStateContainer.setValue(chatId, "gender", personGender.toString());
+            botStateContainer.setValue(chatId, TelegramFieldName.GENDER.getName(), personGender.toString());
         }
 
         InlineKeyboardMarkup keyboardMarkup = TelegramKeyboards.createContactKeyboard();

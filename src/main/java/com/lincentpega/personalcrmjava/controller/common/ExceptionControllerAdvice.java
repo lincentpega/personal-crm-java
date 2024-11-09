@@ -10,6 +10,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +33,11 @@ public class ExceptionControllerAdvice {
                 .map(ExceptionControllerAdvice::toError)
                 .collect(Collectors.toList());
         return ResponseEntity.badRequest().body(new ErrorsResponse<>(errors));
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<?> handleMethodValidationException(HandlerMethodValidationException ignoredEx) {
+        return ResponseEntity.badRequest().build();
     }
 
     @ExceptionHandler(ValidationException.class)

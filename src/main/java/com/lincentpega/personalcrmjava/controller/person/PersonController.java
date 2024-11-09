@@ -15,6 +15,7 @@ import com.lincentpega.personalcrmjava.exception.ValidationException;
 import com.lincentpega.personalcrmjava.service.person.PersonService;
 import com.lincentpega.personalcrmjava.service.person.command.CreatePersonCommand;
 import com.lincentpega.personalcrmjava.service.person.command.UpdatePersonCommand;
+import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 public class PersonController {
 
     private final PersonService personService;
-    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public PersonController(PersonService personService) {
         this.personService = personService;
@@ -45,20 +46,28 @@ public class PersonController {
             @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             Authentication authentication) {
+
         var account = (Account) authentication.getPrincipal();
         Page<Person> pagedPersons = personService.getPersonsWithOwner(account.getId(), pageNumber, pageSize);
         List<ShortPersonResponse> persons = pagedPersons.getContent().stream()
                 .map(PersonResponsePresentor::presentShort)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(
-                new PagedResponseWithTotalCount<>(persons, pagedPersons.getTotalElements(), pagedPersons.getTotalPages(), pageNumber, pageSize)
+                new PagedResponseWithTotalCount<>(
+                        persons,
+                        pagedPersons.getTotalElements(),
+                        pagedPersons.getTotalPages(),
+                        pageNumber,
+                        pageSize
+                )
         );
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<FullPersonResponse> getPersonById(
-            @PathVariable Long id,
+            @PathVariable @Min(value = 1, message = "Id must be positive") Long id,
             Authentication authentication) {
+
         var account = (Account) authentication.getPrincipal();
         Person person = personService.getPersonByIdWithOwner(id, account.getId());
         if (person == null) {
@@ -71,6 +80,7 @@ public class PersonController {
     public ResponseEntity<FullPersonResponse> createPerson(
             @RequestBody @Validated CreatePersonRequest request,
             Authentication authentication) {
+
         LocalDate birthDate = null;
         if (request.birthDate() != null) {
             birthDate = parseDate(request.birthDate());
@@ -96,7 +106,10 @@ public class PersonController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FullPersonResponse> updatePerson(@RequestBody @Validated UpdatePersonRequest request) {
+    public ResponseEntity<FullPersonResponse> updatePerson(
+            @PathVariable @Min(value = 1, message = "Id must be positive") Long id,
+            @RequestBody @Validated UpdatePersonRequest request) {
+
         LocalDate birthDate = null;
         if (request.birthDate() != null) {
             birthDate = parseDate(request.birthDate());
@@ -104,7 +117,7 @@ public class PersonController {
 
         Person updatedPerson = personService.updatePerson(
                 new UpdatePersonCommand(
-                        request.id(),
+                        id,
                         request.firstName(),
                         request.middleName(),
                         request.lastName(),
@@ -119,6 +132,13 @@ public class PersonController {
         );
 
         return ResponseEntity.ok(PersonResponsePresentor.presentFull(updatedPerson));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletePerson(@PathVariable @Min(value = 1, message = "Id must be positive") Long id,
+                             Authentication authentication) {
+        var account = (Account) authentication.getPrincipal();
+        personService.deletePerson(id, account.getId());
     }
 
     private LocalDate parseDate(String date) {

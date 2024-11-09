@@ -2,7 +2,6 @@ package com.lincentpega.personalcrmjava.service.telegram.handler.contact;
 
 import com.lincentpega.personalcrmjava.service.telegram.*;
 import lombok.SneakyThrows;
-import org.springframework.context.ApplicationContext;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -13,9 +12,9 @@ public class TelegramContactCallbackHandler implements TelegramUpdateHandlerFunc
     private final TelegramClient telegramClient;
     private final BotStateContainer botStateContainer;
 
-    public TelegramContactCallbackHandler(ApplicationContext applicationContext) {
-        this.telegramClient = applicationContext.getBean(TelegramClient.class);
-        this.botStateContainer = applicationContext.getBean(BotStateContainer.class);
+    public TelegramContactCallbackHandler(TelegramClient telegramClient, BotStateContainer botStateContainer) {
+        this.telegramClient = telegramClient;
+        this.botStateContainer = botStateContainer;
     }
 
     @SneakyThrows

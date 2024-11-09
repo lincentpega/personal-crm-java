@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -34,6 +35,10 @@ public class AccountService {
 
     public Optional<Account> getAccountByEmail(String email) {
         return accountRepository.findByEmail(email);
+    }
+
+    public List<Account> getAccounts() {
+        return accountRepository.findAll();
     }
 
     public Optional<Account> getAccountByUsername(String username) {

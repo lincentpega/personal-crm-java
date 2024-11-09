@@ -24,11 +24,11 @@ public class PersonService {
     }
 
     public Page<Person> getPersonsWithOwner(long accountId, int pageNumber, int pageSize) {
-        return personRepository.findByAccountId(accountId, Pageable.ofSize(pageSize).withPage(pageNumber));
+        return personRepository.findAll(accountId, Pageable.ofSize(pageSize).withPage(pageNumber));
     }
 
     public Person getPersonByIdWithOwner(long personId, long accountId) {
-        return personRepository.findByIdAndAccountId(personId, accountId).orElse(null);
+        return personRepository.findById(personId, accountId).orElse(null);
     }
 
     public Person createPerson(CreatePersonCommand command) {
@@ -81,5 +81,12 @@ public class PersonService {
         contactInfos.addAll(contactInfosMapped);
 
         return personRepository.save(person);
+    }
+
+    public void deletePerson(long personId, long accountId) {
+        var person = personRepository.findById(personId, accountId)
+                .orElseThrow(() -> new ApplicationException("Person not found"));
+        person.setDeleted(true);
+        personRepository.save(person);
     }
 }

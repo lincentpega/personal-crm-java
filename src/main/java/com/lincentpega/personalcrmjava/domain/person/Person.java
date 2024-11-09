@@ -44,14 +44,16 @@ public class Person {
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "person",
-            cascade = {CascadeType.ALL}
+            cascade = {CascadeType.ALL},
+            orphanRemoval = true
     )
     private final List<ContactInfo> contactInfos = new ArrayList<>();
 
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "person",
-            cascade = {CascadeType.ALL}
+            cascade = {CascadeType.ALL},
+            orphanRemoval = true
     )
     private final List<JobInfo> jobInfos = new ArrayList<>();
 
@@ -61,6 +63,9 @@ public class Person {
 
     @Column(name = "birth_date")
     private @Nullable LocalDate birthDate;
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false, referencedColumnName = "id")

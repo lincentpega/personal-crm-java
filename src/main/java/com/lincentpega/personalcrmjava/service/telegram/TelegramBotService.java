@@ -1,22 +1,13 @@
 package com.lincentpega.personalcrmjava.service.telegram;
 
 import com.lincentpega.personalcrmjava.configuration.TelegramProperties;
-import com.lincentpega.personalcrmjava.service.telegram.handler.TelegramChatIdHandler;
-import com.lincentpega.personalcrmjava.service.telegram.handler.contact.TelegramContactCallbackHandler;
-import com.lincentpega.personalcrmjava.service.telegram.handler.contact.TelegramContactSetFieldHandler;
-import com.lincentpega.personalcrmjava.service.telegram.handler.contact.TelegramCreateContactHandler;
-import com.lincentpega.personalcrmjava.service.telegram.handler.TelegramStartHandler;
-import com.lincentpega.personalcrmjava.service.telegram.handler.contact.TelegramSaveContactHandler;
-import com.lincentpega.personalcrmjava.service.telegram.matcher.TelegramCommandMatcher;
-import com.lincentpega.personalcrmjava.service.telegram.matcher.contact.TelegramContactCallbackMatcher;
-import com.lincentpega.personalcrmjava.service.telegram.matcher.contact.TelegramContactSetFieldMatcher;
-import com.lincentpega.personalcrmjava.service.telegram.matcher.contact.TelegramSaveContactCallbackMatcher;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
+
+import java.util.List;
 
 @Service
 @Log4j2
@@ -24,18 +15,15 @@ public class TelegramBotService {
 
     private final TelegramProperties telegramProperties;
     private final TelegramBotsLongPollingApplication application;
-    private final ApplicationContext applicationContext;
-    private final BotStateContainer botStateContainer;
+    private final List<TelegramUpdateProcessor> updateProcessors;
 
     public TelegramBotService(
             TelegramProperties telegramProperties,
             TelegramBotsLongPollingApplication application,
-            ApplicationContext applicationContext,
-            BotStateContainer botStateContainer) {
+            List<TelegramUpdateProcessor> updateProcessors) {
         this.telegramProperties = telegramProperties;
         this.application = application;
-        this.applicationContext = applicationContext;
-        this.botStateContainer = botStateContainer;
+        this.updateProcessors = updateProcessors;
     }
 
     @SneakyThrows
@@ -46,42 +34,9 @@ public class TelegramBotService {
 
         var bot = new TelegramBot();
 
-        bot.addUpdateHandler(
-                new TelegramUpdateProcessor(
-                        new TelegramCommandMatcher("/chat_id", TelegramBotState.INITIAL, botStateContainer),
-                        new TelegramChatIdHandler(applicationContext)
-                )
-        );
-        bot.addUpdateHandler(
-                new TelegramUpdateProcessor(
-                        new TelegramCommandMatcher("/start", TelegramBotState.INITIAL, botStateContainer),
-                        new TelegramStartHandler(applicationContext)
-                )
-        );
-        bot.addUpdateHandler(
-                new TelegramUpdateProcessor(
-                        new TelegramCommandMatcher("/create_contact", TelegramBotState.INITIAL, botStateContainer),
-                        new TelegramCreateContactHandler(applicationContext)
-                )
-        );
-        bot.addUpdateHandler(
-                new TelegramUpdateProcessor(
-                        new TelegramContactCallbackMatcher(botStateContainer),
-                        new TelegramContactCallbackHandler(applicationContext)
-                )
-        );
-        bot.addUpdateHandler(
-                new TelegramUpdateProcessor(
-                        new TelegramContactSetFieldMatcher(botStateContainer),
-                        new TelegramContactSetFieldHandler(applicationContext)
-                )
-        );
-        bot.addUpdateHandler(
-                new TelegramUpdateProcessor(
-                        new TelegramSaveContactCallbackMatcher(botStateContainer),
-                        new TelegramSaveContactHandler(applicationContext)
-                )
-        );
+        for (var updateProcessor : updateProcessors) {
+            bot.addUpdateHandler(updateProcessor);
+        }
 
         application.registerBot(telegramProperties.getBotToken(), bot);
     }

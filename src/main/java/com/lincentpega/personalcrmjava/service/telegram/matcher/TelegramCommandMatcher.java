@@ -1,24 +1,18 @@
 package com.lincentpega.personalcrmjava.service.telegram.matcher;
 
-import com.lincentpega.personalcrmjava.service.telegram.BotStateContainer;
-import com.lincentpega.personalcrmjava.service.telegram.TelegramBotState;
+import com.lincentpega.personalcrmjava.service.telegram.TelegramUpdateMatcher;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class TelegramCommandMatcher extends TelegramStateMatcher {
+public class TelegramCommandMatcher implements TelegramUpdateMatcher {
 
     private final String command;
 
-    public TelegramCommandMatcher(String command, TelegramBotState state, BotStateContainer stateContainer) {
-        super(state, stateContainer);
+    public TelegramCommandMatcher(String command) {
         this.command = command;
     }
 
     @Override
     public boolean matches(Update update) {
-        var superMatch = super.matches(update);
-        if (!superMatch) {
-            return false;
-        }
         if (update.hasMessage()) {
             var message = update.getMessage();
             if (message.hasText()) {

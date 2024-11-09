@@ -9,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public record UpdatePersonRequest(
         @NonNull Long accountId,
-        @NonNull Long id,
         @NotEmpty String firstName,
         @Nullable String middleName,
         @Nullable String lastName,

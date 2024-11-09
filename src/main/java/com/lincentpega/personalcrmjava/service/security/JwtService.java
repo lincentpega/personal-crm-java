@@ -1,6 +1,7 @@
 package com.lincentpega.personalcrmjava.service.security;
 
 import com.lincentpega.personalcrmjava.domain.account.Account;
+import com.lincentpega.personalcrmjava.domain.account.AccountRole;
 import com.lincentpega.personalcrmjava.domain.account.RefreshToken;
 import com.lincentpega.personalcrmjava.service.security.result.RefreshTokenInfo;
 import io.jsonwebtoken.Claims;
@@ -56,6 +57,7 @@ public class JwtService {
                 .setAudience(audience)
                 .setSubject(account.getUsername())
                 .setIssuedAt(Date.from(Instant.now()))
+                .claim("roles", account.getRoles().stream().map(AccountRole::getName).toList())
                 .setExpiration(Date.from(Instant.now().plus(accessTokenExpiration, ChronoUnit.SECONDS)))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
